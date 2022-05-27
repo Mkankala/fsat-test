@@ -4,15 +4,24 @@ version: "3.8"
 services:
   database:
     container_name: database
-    environment:
-      POSTGRES_USER: default
-      POSTGRES_PASSWORD: default
-      POSTGRES_DB: default
-    hostname: database
-    image: postgres:12
+    image: postgres:10.5
     restart: always
+    hostname: database
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    logging:
+      options:
+        max-size: 10m
+        max-file: "3"
+    ports:
+      - '5438:5432'
     volumes:
-      - /pgdata
+      - ./database/postgres-data:/var/lib/postgresql/data
+      # copy the sql script to create tables
+      - ./database/sql/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
+      # copy the sql script to fill tables
+      - ./database/sql/fill_tables.sql:/docker-entrypoint-initdb.d/fill_tables.sql
 
   backend:
     container_name: backend
@@ -23,11 +32,11 @@ services:
     environment:
       NODE_ENV: development
       POSTGRESQL_HOST: database
-      POSTGRESQL_USER: default
-      POSTGRESQL_PASSWORD: default
-      POSTGRESQL_DATABASE: default
+      POSTGRESQL_USER: postgres
+      POSTGRESQL_PASSWORD: postgres
+      POSTGRESQL_DATABASE: postgres
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      test: [ "CMD", "curl", "-f", "http://localhost:3000" ]
       interval: 1m30s
       timeout: 10s
       retries: 3
@@ -53,7 +62,7 @@ services:
       NODE_ENV: development
       BACKEND_URL: backend
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      test: [ "CMD", "curl", "-f", "http://localhost:3000" ]
       interval: 1m30s
       timeout: 10s
       retries: 3
