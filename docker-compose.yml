@@ -54,8 +54,6 @@ services:
     links:
       - backend
     ports:
-      - "3000:3000"
+      - "4200:4200"
     volumes:
-      - ./frontend:/app:z
-      - /app/node_modules
-    working_dir: "/app"
+      - ./frontend/src:/frontend/src
