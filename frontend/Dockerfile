@@ -21,5 +21,9 @@ FROM nginx:latest
 # Copy the build output to replace the default nginx contents.
 COPY --from=build /usr/local/app/dist/fsa-frontend /usr/share/nginx/html
 
+COPY ./nginx.conf /etc/nginx/conf.d/default.conf
+
 # Expose port 80
 EXPOSE 80
+
+CMD nginx -g "daemon off;"
