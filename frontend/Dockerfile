@@ -1,37 +1,28 @@
-# RedHat UBI 8 with nodejs 14
-FROM registry.access.redhat.com/ubi8/ubi as builder
-RUN dnf module install -y nodejs:14
+# Stage 1: Compile and Build angular codebase
 
-# Install packages, build and keep only prod packages
-WORKDIR /app
-COPY . ./
-RUN npm ci --only=prod && \
-    npm run build
+# Use official node image as the base image
+FROM node:14 as build
 
-# Deployment container
-FROM registry.access.redhat.com/ubi8/ubi-micro
+# Set the working directory
+WORKDIR /usr/local/app
 
-# Set node to production 
-ENV NODE_ENV production
+# Add the source code to app
+COPY ./ /usr/local/app/
 
-# Node packages and dependencies
-COPY --from=builder /usr/bin/node /usr/bin/
-COPY --from=builder /usr/lib64/libz.so.1 /usr/lib64/
-COPY --from=builder /usr/lib64/libbrotlidec.so.1 /usr/lib64/
-COPY --from=builder /usr/lib64/libbrotlienc.so.1 /usr/lib64/
-COPY --from=builder /usr/lib64/libcrypto.so.1.1 /usr/lib64/
-COPY --from=builder /usr/lib64/libssl.so.1.1 /usr/lib64/
-COPY --from=builder /usr/lib64/libstdc++.so.6 /usr/lib64/
-COPY --from=builder /usr/lib64/libgcc_s.so.1 /usr/lib64/
-COPY --from=builder /usr/lib64/libbrotlicommon.so.1 /usr/lib64/
+# Install all the dependencies
+RUN npm install
 
-# Copy over app
-WORKDIR /app
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/dist ./dist
+# Generate the build of the application
+RUN npm run build
 
-# Expose port - mostly a convention, for readability
-EXPOSE 3000
 
-# Start up command
-ENTRYPOINT ["node", "dist/main"]
+# Stage 2: Serve app with nginx server
+
+# Use official nginx image as the base image
+FROM nginx:latest
+
+# Copy the build output to replace the default nginx contents.
+COPY --from=build /usr/local/app/dist/fsa-frontend /usr/share/nginx/html
+
+# Expose port 80
+EXPOSE 80
