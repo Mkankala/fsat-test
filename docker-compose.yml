@@ -3,14 +3,16 @@ version: "3.8"
 
 services:
   database:
+    build: database
     container_name: database
     environment:
       POSTGRES_USER: default
       POSTGRES_PASSWORD: default
       POSTGRES_DB: default
     hostname: database
-    image: postgres:12
     restart: always
+    ports:
+      - 5438:5432
     volumes:
       - /pgdata
 
@@ -27,7 +29,7 @@ services:
       POSTGRESQL_PASSWORD: default
       POSTGRESQL_DATABASE: default
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      test: [ "CMD", "curl", "-f", "http://localhost:3000" ]
       interval: 1m30s
       timeout: 10s
       retries: 3

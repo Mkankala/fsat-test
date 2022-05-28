@@ -12,21 +12,6 @@ env:
   REPONAME: greenfield-template
 
 jobs:
-  cleanup-openshift:
-    name: Cleanup OpenShift
-    runs-on: ubuntu-latest
-    environment:
-      name: dev
-    steps:
-      - uses: actions/checkout@v2
-      - name: Remove OpenShift artifacts
-        run: |
-          oc login --token=${{ secrets.OC_TOKEN }} --server=${{ secrets.OC_SERVER }}
-          oc project ${{ secrets.NAMESPACE }}
-
-          # Remove old build runs, build pods and deployment pods
-          oc delete all,pvc,secret -l app=${{ env.NAME }}-${{ github.event.number }}
-
   cleanup-ghcr:
     name: Cleanup ghcr.io
     runs-on: ubuntu-latest

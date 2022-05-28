@@ -7,7 +7,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  TRIGGERS: ('frontend/' 'backend/' '.github/openshift' '.github/workflows')
+  TRIGGERS: ('frontend/' 'backend/'  '.github/workflows')
   NAME: gfp
 
 jobs:
@@ -154,25 +154,7 @@ jobs:
           npm ci
           npm test
 
-  # # https://github.com/snyk/snyk
-  # snyk:
-  #   name: Snyk
-  #   needs:
-  #     - check
-  #   if: needs.check.outputs.build == 'true'
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #   - name: Checkout repository
-  #     uses: actions/checkout@v2
-
-  #   - name: Run Snyk to check for vulnerabilities
-  #     uses: snyk/actions/node@master
-  #     env:
-  #       SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-  #     with:
-  #       args: --all-projects --severity-threshold=high
-
-  # https://github.com/marketplace/actions/aqua-security-trivy
+  
   trivy-repo:
     name: Trivy-Repo
     needs:
@@ -258,22 +240,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Deploy
-        run: |
-          # Login to OpenShift and select project
-          oc login --token=${{ secrets.OC_TOKEN }} --server=${{ secrets.OC_SERVER }}
-          oc project ${{ secrets.NAMESPACE }}
-
-          # Process and apply deployment templates
-          oc process -f .github/openshift/deploy.database.yml -p ZONE=${{ github.event.number }} | oc apply -f -
-          oc process -f .github/openshift/deploy.backend.yml -p ZONE=${{ github.event.number }} \
-            -p PROMOTE=${{ github.repository }}:${{ github.event.number }}-backend | oc apply -f -
-          oc process -f .github/openshift/deploy.frontend.yml -p ZONE=${{ github.event.number }} \
-            -p PROMOTE=${{ github.repository }}:${{ github.event.number }}-frontend | oc apply -f -
-
-          # Follow any active rollouts (see deploymentconfigs)
-          oc rollout status dc/${{ env.NAME }}-${{ github.event.number }}-database -w
-          oc rollout status dc/${{ env.NAME }}-${{ github.event.number }}-backend -w
-          oc rollout status dc/${{ env.NAME }}-${{ github.event.number }}-frontend -w
+        run: docker-compose run
+          
 
       - name: Deployment update
         uses: mshick/add-pr-comment@v1
@@ -329,22 +297,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Deploy
-        run: |
-          # Login to OpenShift and select project
-          oc login --token=${{ secrets.OC_TOKEN }} --server=${{ secrets.OC_SERVER }}
-          oc project ${{ secrets.NAMESPACE }}
-
-          # Process and apply deployment templates
-          oc process -f .github/openshift/deploy.database.yml -p ZONE=prod | oc apply -f -
-          oc process -f .github/openshift/deploy.backend.yml -p ZONE=prod \
-            -p PROMOTE=${{ github.repository }}:${{ github.event.number }}-backend | oc apply -f -
-          oc process -f .github/openshift/deploy.frontend.yml -p ZONE=prod \
-            -p PROMOTE=${{ github.repository }}:${{ github.event.number }}-frontend | oc apply -f -
-
-          # Follow any active rollouts (see deploymentconfigs)
-          oc rollout status dc/${{ env.NAME }}-prod-database -w
-          oc rollout status dc/${{ env.NAME }}-prod-backend -w
-          oc rollout status dc/${{ env.NAME }}-prod-frontend -w
+        run: docker-compose run
 
       - name: Deployment update
         uses: mshick/add-pr-comment@v1
