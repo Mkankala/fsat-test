@@ -10,13 +10,15 @@ services:
       POSTGRES_PASSWORD: default
       POSTGRES_DB: default
     hostname: database
-    restart: always
     ports:
       - 5438:5432
+    image: postgres:12
+    restart: always
     volumes:
       - /pgdata
 
-  springboot-docker-compose-app-container:
+  backend:
+    container_name: backend
     image: springboot-docker-compose-app:1
     build:
       context: ./backend
@@ -26,7 +28,7 @@ services:
       - /data/springboot-docker-compose-app
 
     ports:
-      - "8081:8081"
+      - "8080:8080"
     environment:
       NODE_ENV: development
       POSTGRESQL_HOST: database
@@ -34,12 +36,11 @@ services:
       POSTGRESQL_PASSWORD: default
       POSTGRESQL_DATABASE: default
     healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:8081" ]
+      test: [ "CMD", "curl", "-f", "http://localhost:8080" ]
       interval: 1m30s
       timeout: 10s
       retries: 3
       start_period: 40s
-    hostname: backend
     links:
       - database
 
