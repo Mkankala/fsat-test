@@ -23,6 +23,14 @@ public class City {
         this.cityName = inCityName;
     }
 
+    City() {
+
+    }
+
+    public City(String inCityName) {
+        this.cityName = inCityName;
+    }
+
     public String getCityName() {
         return cityName;
     }
