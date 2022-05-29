@@ -1,0 +1,40 @@
+// Mixins
+@mixin clearfix() {
+  &::after {
+    display: block;
+    content: " ";
+    clear: both;
+  }
+}
+
+@mixin flex-box() {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+}
+
+@mixin flex($values) {
+  -webkit-flex: $values;
+  -ms-flex: $values;
+  flex: $values;
+}
+
+@mixin flex-direction($values) {
+  -webkit-flex-direction: $values;
+  -ms-flex-direction: $values;
+  flex-direction: $values;
+}
+
+@mixin flex-flow($values) {
+  -webkit-flex-flow: $values;
+  -ms-flex-flow: $values;
+  flex-flow: $values;
+}
+
+@mixin align-items($values) {
+  -webkit-align-items: $values;
+  -webkit-box-align: $values;
+  -ms-flex-align: $values;
+  align-items: $values;
+}

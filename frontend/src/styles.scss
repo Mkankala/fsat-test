@@ -1,13 +1,25 @@
 /* You can add global styles to this file, and also import other style files */
 
-/* Importing Bootstrap SCSS file. */
-@import '~bootstrap/scss/bootstrap';
-
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+// html, body { height: 100%; }
+// body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 /* Importing Bootstrap SCSS file. */
 @import "~bootstrap/scss/bootstrap";
 
 /* Importing Datepicker SCSS file. */
 @import "~ngx-bootstrap/datepicker/bs-datepicker";
+
+// Base
+@import "assets/styles/base/base";
+
+// Helpers
+@import "assets/styles/base/helpers";
+
+// Layout
+@import "assets/styles/layout/layout";
+
+// Typography
+@import "assets/styles/base/typography";
+
+// Material Icons
+@import "assets/styles/base/material-icons";
