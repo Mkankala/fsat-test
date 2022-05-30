@@ -133,9 +133,11 @@ jobs:
         run: |
           cd backend
           npm ci
+          npm install eslint-plugin-import@latest --save-dev
           npm run lint
           cd ../frontend
           npm ci
+          npm install eslint-plugin-import@latest --save-dev
           npm run lint
 
 
