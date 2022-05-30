@@ -13,7 +13,7 @@ public class City {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long cityId;
 
-    public String cityName;
+    String cityName;
 
     City() {
 

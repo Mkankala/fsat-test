@@ -22,25 +22,19 @@ services:
     build: backend
     container_name: backend
     hostname: backend
+    restart: always
+    image: backend:1
     ports:
       - "8080:8080"
     environment:
-      NODE_ENV: development
       POSTGRESQL_HOST: database
       POSTGRESQL_USER: default
       POSTGRESQL_PASSWORD: default
       POSTGRESQL_DATABASE: default
-    healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:8080" ]
-      interval: 1m30s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
     links:
       - database
-      - frontend
     volumes:
-      - /data/fsa-backend
+      - /backend
 
   frontend:
     container_name: frontend

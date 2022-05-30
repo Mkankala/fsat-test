@@ -1,7 +1,6 @@
 package ca.cgi.fsa.controllers;
 
 import java.util.List;
-
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,7 +11,7 @@ import ca.cgi.fsa.repositories.CityRepository;
 
 @RestController
 public class CityController {
-    public CityRepository Cities;
+    private CityRepository Cities;
 
     public CityController(CityRepository cities) {
         this.Cities = cities;
@@ -24,7 +23,7 @@ public class CityController {
     }
 
     @DeleteMapping("/city/{id}")
-    public List<City> deleteCat(@PathVariable Long id) {
+    public List<City> deleteCity(@PathVariable Long id) {
         Cities.deleteById(id);
         return Cities.findAll();
     }
