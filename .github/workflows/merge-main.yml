@@ -1,10 +1,9 @@
-
 name: Main Merge
 
 on:
   push:
     branches:
-      main
+      pipeline
 
 jobs:
   codeql:
