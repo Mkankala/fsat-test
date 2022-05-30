@@ -119,7 +119,27 @@ jobs:
           npm ci
           npm test
 
-  
+  linting:
+    name: Linting-Code
+    needs:
+      - check
+    if: needs.check.outputs.build == 'true'
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      
+      - name: Tests
+        run: |
+          cd backend
+          npm ci
+          npm run lint
+          cd ../frontend
+          npm ci
+          npm run lint
+
+
+
   trivy-repo:
     name: Trivy-Repo
     needs:
