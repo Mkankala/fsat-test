@@ -63,7 +63,7 @@ jobs:
         with:
           context: ./backend/
           push: false 
-          tag: backend:latest
+          tags: backend:latest
 
   build-frontend:
     name: Build-Frontend
@@ -86,7 +86,7 @@ jobs:
         with:
           context: ./frontend/
           push: false
-          tag: frontend:latest
+          tags: frontend:latest
 
   tests-frontend:
     name: Tests-Frontend
