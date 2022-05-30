@@ -5,45 +5,34 @@ services:
   database:
     build: database
     container_name: database
+    hostname: database
     environment:
       POSTGRES_USER: default
       POSTGRES_PASSWORD: default
       POSTGRES_DB: default
-    hostname: database
-    restart: always
+
     ports:
       - 5438:5432
+    restart: always
     volumes:
       - /pgdata
 
   backend:
+    build: backend
     container_name: backend
-    entrypoint:
-      - "sh"
-      - "-c"
-      - "npm i && npm run start"
+    hostname: backend
+    restart: always
+    ports:
+      - "8080:8080"
     environment:
-      NODE_ENV: development
       POSTGRESQL_HOST: database
       POSTGRESQL_USER: default
       POSTGRESQL_PASSWORD: default
       POSTGRESQL_DATABASE: default
-    healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:3000" ]
-      interval: 1m30s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
-    hostname: backend
-    image: node:14
     links:
       - database
-    ports:
-      - "3001:3000"
     volumes:
-      - ./backend:/app:z
-      - /app/node_modules
-    working_dir: "/app"
+      - /backend
 
   frontend:
     container_name: frontend
