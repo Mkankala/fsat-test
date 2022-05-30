@@ -87,7 +87,7 @@ jobs:
           push: false
           tags: frontend:latest
 
-    build-database:
+  build-database:
     name: Build-Database
     needs:
       - check
