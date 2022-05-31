@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -8,7 +8,7 @@ import { environment } from 'src/environments/environment';
 })
 export class WeatherApiServiceService {
 
-  private _locationSub = new BehaviorSubject<string | null>(null); // City location.
+  private _locationSub = new Subject<string | null>(); // City location.
   $currentCity: Observable<string> = this._locationSub.asObservable();
 
   constructor(private http: HttpClient) { }
