@@ -6,6 +6,7 @@ COPY pom.xml .
 RUN mvn dependency:go-offline
 COPY ./src ./src
 RUN mvn clean install -Dmaven.test.skip=true
+RUN mvn sonar:sonar -Dsonar.url=https://sonarcloud.io -Dsonar.login=2bc897157733605299c489d99fa4b7de4b2d8083
 
 FROM openjdk:17
 WORKDIR /opt/service
