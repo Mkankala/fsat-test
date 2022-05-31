@@ -11,13 +11,13 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CurrentWeatherComponent } from './components/current-weather/current-weather.component';
 import { HeaderComponent } from './components/header/header.component';
-import { WeatherSearchComponent } from './components/weather-search/weather-search.component';
+import { LocationSearchComponent } from './components/location-search/location-search.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
-    WeatherSearchComponent,
+    LocationSearchComponent,
     CurrentWeatherComponent
   ],
   imports: [

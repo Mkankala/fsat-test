@@ -1,13 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { WeatherApiServiceService } from 'src/app/services/weather-api-service.service';
-
+/**
+ * This Location Search component take input search text location (city) from 
+ * user and delicates to service for search.
+ */
 @Component({
-  selector: 'app-weather-search',
-  templateUrl: './weather-search.component.html',
-  styleUrls: ['./weather-search.component.scss']
+  selector: 'app-location-search',
+  templateUrl: './location-search.component.html',
+  styleUrls: ['./location-search.component.scss']
 })
-export class WeatherSearchComponent implements OnInit {
+export class LocationSearchComponent implements OnInit {
 
   model: any = {city: null};
 
